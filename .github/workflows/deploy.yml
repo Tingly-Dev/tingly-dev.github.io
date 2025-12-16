@@ -40,8 +40,27 @@ jobs:
         # Initialize and push to gh-pages
         git checkout --orphan gh-pages 2>/dev/null || git checkout gh-pages
         rm -rf * 2>/dev/null || true
-        cp -r tingly-box/* .
-        echo "tingly-dev.github.io" > CNAME
+
+        # Create tingly-box subdirectory in gh-pages
+        mkdir -p tingly-box
+        cp -r tingly-box/* tingly-box/
+
+        # Create index.html to redirect to tingly-box
+        cat > index.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting to Tingly Box</title>
+    <script>
+        window.location.href = "/tingly-box/";
+    </script>
+</head>
+<body>
+    <p>Redirecting to <a href="/tingly-box/">Tingly Box</a>...</p>
+</body>
+</html>
+EOF
 
         git add -A
         git commit -m "Deploy to GitHub Pages"
