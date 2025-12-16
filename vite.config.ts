@@ -16,7 +16,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
   base: mode === "production" ? "/tingly-box/" : "/",
-  build: {
-    outDir: "tingly-box",
-  },
 }));

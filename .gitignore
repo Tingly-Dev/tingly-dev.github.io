@@ -25,3 +25,7 @@ dist-ssr
 
 # Keep existing README.md on tingly-pages remote
 README.md
+
+# Build outputs
+dist/
+tingly-box/
