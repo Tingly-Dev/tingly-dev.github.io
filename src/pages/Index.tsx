@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Ensure react-syntax-highlighter is installed: npm install react-syntax-highlighter
+// Syntax Highlighter Imports
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
@@ -22,11 +22,18 @@ import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('json', json);
 
+// Layout Constants
+const SECTION_WIDTH = 1060;
+const WIDTH_SCALE = 0.9;
+const SCALED_WIDTH = `${SECTION_WIDTH * WIDTH_SCALE}px`; // ~954px (Hero image only)
+const FULL_WIDTH = `${SECTION_WIDTH}px`; // 1060px (Content sections)
+
 import screenshotHome from "@/assets/screenshot-home.png";
 import screenshotCredentials from "@/assets/screenshot-credentials.png";
 import screenshotRules from "@/assets/screenshot-rules.png";
 import screenshotSystem from "@/assets/screenshot-system.png";
 import screenshotHistory from "@/assets/screenshot-history.png";
+
 const screenshots = [
     { src: screenshotHome, alt: "Tingly Box Home - Model Proxy Config" },
     { src: screenshotCredentials, alt: "Tingly Box Credentials Management" },
@@ -59,9 +66,9 @@ const jsonExample = `
 # Update your ~/.claude/settings.json
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN":"{tingly-box-token}",
-    "ANTHROPIC_BASE_URL":"http://localhost:8080/anthropic",
-    "ANTHROPIC_MODEL":"tingly"
+    "ANTHROPIC_AUTH_TOKEN": "{tingly-box-token}",
+    "ANTHROPIC_BASE_URL": "http://localhost:8080/anthropic",
+    "ANTHROPIC_MODEL": "tingly"
   }
 }`;
 
@@ -76,12 +83,13 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
 
     return (
         <div className="relative rounded-lg border w-full h-full overflow-hidden bg-[#282c34]">
-            {/* --- NUCLEAR CSS FIX --- */}
+            {/* The "Nuclear" wrap fix ensures long strings break regardless of library defaults */}
             <style dangerouslySetInnerHTML={{ __html: `
                 .force-wrap pre {
                     white-space: pre-wrap !important;
                     word-break: break-all !important;
                     overflow-wrap: anywhere !important;
+                    overflow-x: hidden !important;
                 }
                 .force-wrap code {
                     white-space: pre-wrap !important;
@@ -108,7 +116,7 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
                 style={oneDark}
                 wrapLines={true}
                 wrapLongLines={true}
-                className="force-wrap" // Applies the nuclear styles
+                className="force-wrap"
                 customStyle={{
                     margin: 0,
                     padding: '2.5rem 1rem 1.5rem 1rem',
@@ -116,9 +124,9 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
                     boxSizing: 'border-box',
                     minHeight: '280px',
                     height: '100%',
-                    fontSize: '0.85rem',
+                    fontSize: '0.825rem',
                     lineHeight: '1.6',
-                    background: 'transparent', // Use container bg
+                    background: 'transparent',
                     overflowX: 'hidden',
                 }}
             >
@@ -135,8 +143,7 @@ const Hero = () => {
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
                 <span className="text-primary">Tingly</span> Box
             </h1>
-            {/* Increased max-w slightly to balance the wider image below */}
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mb-10">
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-10">
                 Provider-agnostic AI model proxy with unified API
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-10">
@@ -152,8 +159,8 @@ const Hero = () => {
                 </Button>
             </div>
 
-            {/* Changed from max-w-4xl to max-w-[1060px] to match your other sections */}
-            <div className="relative w-full max-w-[1060px]">
+            {/* Application of SCALED_WIDTH (0.9x) only to the carousel */}
+            <div className="relative w-full mx-auto" style={{ maxWidth: SCALED_WIDTH }}>
                 <div className="relative overflow-hidden rounded-lg border bg-card shadow-lg">
                     <img
                         src={screenshots[currentSlide].src}
@@ -189,8 +196,7 @@ const Hero = () => {
 
 const Features = () => (
     <section className="py-12 px-4">
-        {/* Custom width: slightly more than 5xl (1024px) but less than 6xl (1152px) */}
-        <div className="max-w-[1060px] mx-auto">
+        <div className="mx-auto" style={{ maxWidth: FULL_WIDTH }}>
             <h2 className="text-3xl font-bold text-center mb-12">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {features.map((f) => (
@@ -207,9 +213,8 @@ const Features = () => (
 
 const QuickStart = () => (
     <section className="py-12 px-4 bg-card/50">
-        <div className="max-w-[1060px] mx-auto">
+        <div className="mx-auto" style={{ maxWidth: FULL_WIDTH }}>
             <h2 className="text-3xl font-bold text-center mb-6">Quick Start</h2>
-            {/* Reduced gap to 4 to maximize internal code space */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="min-w-0 w-full">
                     <CodeBlock code={pythonExample} language="python" />
@@ -224,7 +229,7 @@ const QuickStart = () => (
 
 const Footer = () => (
     <footer className="py-12 px-4 border-t">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-4" style={{ maxWidth: FULL_WIDTH }}>
             <div className="text-muted-foreground text-sm">MIT License © {new Date().getFullYear()} Tingly Box</div>
             <a href="https://github.com/tingly-dev/tingly-box" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
                 <Github className="w-5 h-5" /> GitHub
