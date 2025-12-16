@@ -185,46 +185,89 @@ const Features = () => {
 };
 
 const QuickStart = () => {
-  const [copied, setCopied] = useState(false);
+  const [copiedPython, setCopiedPython] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
   
-  const codeExample = `# Install Tingly Box
-pip install tingly-box
+  const pythonExample = `import openai
 
-# Start the server
-tingly-box serve --config config.yaml
+client = openai.OpenAI(
+  base_url="http://localhost:12580/openai",
+  api_key="YOUR_TINGLY_BOX_KEY"
+)
 
-# Use with OpenAI client
-from openai import OpenAI
-client = OpenAI(base_url="http://localhost:8000/v1")`;
+# Use as before
+response = client.chat.completions.create(
+  model="tingly",
+  messages=[{"role": "user", "content": "Hello!"}]
+)`;
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(codeExample);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const jsonExample = `{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "{your-tingly-box-token}",
+    "ANTHROPIC_BASE_URL": "http://localhost:8080/anthropic",
+    "ANTHROPIC_MODEL": "tingly"
+  }
+}`;
+
+  const handleCopyPython = async () => {
+    await navigator.clipboard.writeText(pythonExample);
+    setCopiedPython(true);
+    setTimeout(() => setCopiedPython(false), 2000);
+  };
+
+  const handleCopyJson = async () => {
+    await navigator.clipboard.writeText(jsonExample);
+    setCopiedJson(true);
+    setTimeout(() => setCopiedJson(false), 2000);
   };
 
   return (
     <section className="py-20 px-4 bg-card/50">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-8">Quick Start</h2>
-        <div className="relative rounded-lg bg-secondary border border-border overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border">
-            <span className="text-sm text-muted-foreground font-mono">terminal</span>
-            <button
-              onClick={handleCopy}
-              className="p-1 hover:bg-muted rounded transition-colors"
-              aria-label="Copy code"
-            >
-              {copied ? (
-                <Check className="w-4 h-4 text-primary" />
-              ) : (
-                <Copy className="w-4 h-4 text-muted-foreground" />
-              )}
-            </button>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Python Example */}
+          <div className="relative rounded-lg bg-secondary border border-border overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+              <span className="text-sm text-muted-foreground font-mono">python</span>
+              <button
+                onClick={handleCopyPython}
+                className="p-1 hover:bg-muted rounded transition-colors"
+                aria-label="Copy Python code"
+              >
+                {copiedPython ? (
+                  <Check className="w-4 h-4 text-primary" />
+                ) : (
+                  <Copy className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+            </div>
+            <pre className="p-4 overflow-x-auto">
+              <code className="text-sm font-mono">{pythonExample}</code>
+            </pre>
           </div>
-          <pre className="p-4 overflow-x-auto">
-            <code className="text-sm font-mono">{codeExample}</code>
-          </pre>
+
+          {/* JSON Example */}
+          <div className="relative rounded-lg bg-secondary border border-border overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+              <span className="text-sm text-muted-foreground font-mono">~/.claude/settings.json</span>
+              <button
+                onClick={handleCopyJson}
+                className="p-1 hover:bg-muted rounded transition-colors"
+                aria-label="Copy JSON config"
+              >
+                {copiedJson ? (
+                  <Check className="w-4 h-4 text-primary" />
+                ) : (
+                  <Copy className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+            </div>
+            <pre className="p-4 overflow-x-auto">
+              <code className="text-sm font-mono">{jsonExample}</code>
+            </pre>
+          </div>
         </div>
       </div>
     </section>
