@@ -43,7 +43,6 @@ jobs:
       - name: Build
         run: |
           npm run build
-          cp -R ./dist/* ./
         
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -51,7 +50,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist
-          path: '.'
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
