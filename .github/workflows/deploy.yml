@@ -3,7 +3,12 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
+      - tingly-box-pages
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -11,13 +16,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: 18
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -25,42 +30,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Stage build output outside git workspace
-      - name: Stage build artifacts
-        run: |
-          rm -rf /tmp/tingly-box
-          mkdir -p /tmp/tingly-box
-          cp -r dist/* /tmp/tingly-box/
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Deploy to gh-pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
-          # Switch to gh-pages
-          git checkout --orphan gh-pages || git checkout gh-pages
-          rm -rf *
-
-          # Restore build artifacts
-          mkdir -p tingly-box
-          cp -r /tmp/tingly-box/* tingly-box/
-
-          # Root redirect page
-          cat > index.html <<'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-          <meta charset="utf-8">
-          <title>Redirecting</title>
-          <script>
-          window.location.href = "/tingly-box/";
-          </script>
-          </head>
-          <body>
-          <p>Redirecting to <a href="/tingly-box/">Tingly Box</a>...</p>
-          </body>
-          </html>
-          EOF
-          git add -A
-          git commit -m "Deploy to GitHub Pages"
-          git push origin gh-pages --force
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
