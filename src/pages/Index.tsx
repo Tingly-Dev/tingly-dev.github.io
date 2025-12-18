@@ -2,15 +2,15 @@ import { useState } from "react";
 import {
     Copy,
     Check,
-    Github,
     ExternalLink,
     Layers,
-    Zap,
-    Settings,
-    Layout,
     ChevronLeft,
     ChevronRight,
+    Globe,
+    ArrowLeftRight,
+    Gauge,
 } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 
 // Syntax Highlighter Imports
@@ -43,10 +43,10 @@ const screenshots = [
 ];
 
 const features = [
-    { icon: Layers, title: "Multi-Provider Support", description: "Connect to OpenAI, Anthropic, Google, and more through a single interface." },
-    { icon: Zap, title: "Unified API", description: "OpenAI-compatible API that works with all your existing tools and libraries." },
-    { icon: Settings, title: "Config-Based Routing", description: "Route requests to different providers based on model names and custom rules." },
-    { icon: Layout, title: "Web Management UI", description: "Monitor usage, manage API keys, and configure providers through a clean interface." },
+    { icon: Globe, title: "Unified API", description: "Single configuration to connect hundreds of model providers." },
+    { icon: Layers, title: "Load Balancing", description: "Distribute requests across multiple tokens by tactics." },
+    { icon: ArrowLeftRight, title: "Auto API Translation", description: "Automatically translate API parameters among different providers." },
+    { icon: Gauge, title: "High Performance", description: "Additional latency less than 1ms for seamless integration." },
 ];
 
 const pythonExample = `import openai
@@ -149,7 +149,7 @@ const Hero = () => {
             <div className="flex flex-wrap justify-center gap-4 mb-10">
                 <Button asChild size="lg" className="gap-2">
                     <a href="https://github.com/tingly-dev/tingly-box" target="_blank" rel="noopener noreferrer">
-                        <Github className="w-5 h-5" /> GitHub
+                        <FaGithub className="w-5 h-5" /> GitHub
                     </a>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="gap-2">
@@ -232,7 +232,7 @@ const Footer = () => (
         <div className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-4" style={{ maxWidth: FULL_WIDTH }}>
             <div className="text-muted-foreground text-sm">MIT License © {new Date().getFullYear()} Tingly Box</div>
             <a href="https://github.com/tingly-dev/tingly-box" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                <Github className="w-5 h-5" /> GitHub
+                <FaGithub className="w-5 h-5" /> GitHub
             </a>
         </div>
     </footer>
