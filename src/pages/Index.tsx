@@ -1,24 +1,18 @@
-import {useState} from "react";
+import { faqs, features, screenshots } from "@/data/text";
+import { Card, CardContent, Button as MuiButton } from "@mui/material";
 import {
-    Copy,
-    Check,
-    ExternalLink,
-    Layers,
     ChevronLeft,
     ChevronRight,
-    Globe,
-    ArrowLeftRight,
-    Gauge,
+    ExternalLink
 } from "lucide-react";
-import {FaGithub} from "react-icons/fa";
-import {Button} from "@/components/ui/button";
-
+import { useState } from "react";
+import { FaGithub } from "react-icons/fa";
 // Syntax Highlighter Imports
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
-import {oneDark} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
-import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 SyntaxHighlighter.registerLanguage('bash', bash);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -30,33 +24,8 @@ const WIDTH_SCALE = 0.9;
 const SCALED_WIDTH = `${SECTION_WIDTH * WIDTH_SCALE}px`; // ~954px (Hero image only)
 const FULL_WIDTH = `${SECTION_WIDTH}px`; // 1060px (Content sections)
 
-import screenshotHome from "@/assets/screenshot-home.png";
-import screenshotCredentials from "@/assets/screenshot-credentials.png";
-import screenshotRules from "@/assets/screenshot-rules.png";
-import screenshotSystem from "@/assets/screenshot-system.png";
-import screenshotHistory from "@/assets/screenshot-history.png";
 
-const screenshots = [
-    {src: screenshotHome, alt: "Tingly Box Home - Model Proxy Config"},
-    {src: screenshotCredentials, alt: "Tingly Box Credentials Management"},
-    {src: screenshotRules, alt: "Tingly Box Proxy Rules Configuration"},
-    {src: screenshotSystem, alt: "Tingly Box Server Status & Control"},
-    {src: screenshotHistory, alt: "Tingly Box Activity Log & History"},
-];
-
-const features = [
-    {icon: Globe, title: "Unified API", description: "Single configuration to connect hundreds of model providers."},
-    {icon: Layers, title: "Load Balancing", description: "Distribute requests across multiple tokens by tactics."},
-    {
-        icon: ArrowLeftRight,
-        title: "Auto API Translation",
-        description: "Automatically translate API parameters among different providers."
-    },
-    {icon: Gauge, title: "High Performance", description: "Additional latency less than 1ms for seamless integration."},
-];
-
-
-const CodeBlock = ({code, language}: { code: string; language: string }) => {
+const CodeBlock = ({ code, language }: { code: string; language: string }) => {
     const [copied, setCopied] = useState(false);
 
     return (
@@ -68,7 +37,7 @@ const CodeBlock = ({code, language}: { code: string; language: string }) => {
                     word-break: break-all !important;
                     overflow-wrap: anywhere !important;
                 }
-            `}}/>
+            `}} />
 
             <div className="absolute top-0 left-2 px-2 py-0.5 text-[10px] font-bold rounded-b bg-gray-700 text-white z-10 uppercase">
                 {language}
@@ -110,21 +79,32 @@ const Hero = () => {
                 Provider-agnostic AI model proxy with unified API
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-10">
-                <Button asChild size="lg" className="gap-2">
-                    <a href="https://github.com/tingly-dev/tingly-box" target="_blank" rel="noopener noreferrer">
-                        <FaGithub className="w-5 h-5"/> GitHub
-                    </a>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="gap-2">
-                    <a href="https://github.com/tingly-dev/tingly-box/releases" target="_blank"
-                       rel="noopener noreferrer">
-                        <ExternalLink className="w-5 h-5"/> Releases
-                    </a>
-                </Button>
+                <MuiButton
+                    variant="contained"
+                    href="https://github.com/tingly-dev/tingly-box"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="large"
+                    startIcon={<FaGithub className="w-5 h-5" />}
+                    sx={{ gap: '8px' }}
+                >
+                    GitHub
+                </MuiButton>
+                <MuiButton
+                    variant="outlined"
+                    href="https://github.com/tingly-dev/tingly-box/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="large"
+                    startIcon={<ExternalLink className="w-5 h-5" />}
+                    sx={{ gap: '8px' }}
+                >
+                    Releases
+                </MuiButton>
             </div>
 
             {/* Application of SCALED_WIDTH (0.9x) only to the carousel */}
-            <div className="relative w-full mx-auto" style={{maxWidth: SCALED_WIDTH}}>
+            <div className="relative w-full mx-auto" style={{ maxWidth: SCALED_WIDTH }}>
                 <div className="relative overflow-hidden rounded-lg border bg-card shadow-lg">
                     <img
                         src={screenshots[currentSlide].src}
@@ -135,13 +115,13 @@ const Hero = () => {
                         onClick={() => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length)}
                         className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/80 border hover:bg-background transition-colors"
                     >
-                        <ChevronLeft className="w-5 h-5"/>
+                        <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                         onClick={() => setCurrentSlide((prev) => (prev + 1) % screenshots.length)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/80 border hover:bg-background transition-colors"
                     >
-                        <ChevronRight className="w-5 h-5"/>
+                        <ChevronRight className="w-5 h-5" />
                     </button>
                 </div>
                 <div className="flex justify-center gap-2 mt-4">
@@ -160,15 +140,23 @@ const Hero = () => {
 
 const Features = () => (
     <section className="py-12 px-4">
-        <div className="mx-auto" style={{maxWidth: FULL_WIDTH}}>
+        <div className="mx-auto" style={{ maxWidth: FULL_WIDTH }}>
             <h2 className="text-3xl font-bold text-center mb-12">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {features.map((f) => (
-                    <div key={f.title} className="p-6 rounded-lg bg-card border">
-                        <f.icon className="w-10 h-10 text-primary mb-4"/>
-                        <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
-                        <p className="text-muted-foreground">{f.description}</p>
-                    </div>
+                    <Card key={f.title} sx={{
+                        backgroundColor: 'var(--card)',
+                        border: '1px solid var(--border)',
+                        '&:hover': {
+                            boxShadow: 'var(--shadow-lg)',
+                        }
+                    }}>
+                        <CardContent sx={{ p: 3 }}>
+                            <f.icon className="w-10 h-10 text-primary mb-4" />
+                            <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
+                            <p className="text-muted-foreground">{f.description}</p>
+                        </CardContent>
+                    </Card>
                 ))}
             </div>
         </div>
@@ -332,35 +320,32 @@ const QuickStart = () => {
 const Footer = () => (
     <footer className="py-12 px-4 border-t">
         <div className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-4"
-             style={{maxWidth: FULL_WIDTH}}>
-            <div className="text-muted-foreground text-sm">MIT License © {new Date().getFullYear()} Tingly Box</div>
-            <a href="https://github.com/tingly-dev/tingly-box" target="_blank" rel="noopener noreferrer"
-               className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                <FaGithub className="w-5 h-5"/> GitHub
-            </a>
+            style={{ maxWidth: FULL_WIDTH }}>
+            <div className="text-muted-foreground text-sm">Apache-2.0 License © {new Date().getFullYear()} Tingly Box</div>
+            <MuiButton
+                href="https://github.com/tingly-dev/tingly-box"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<FaGithub className="w-5 h-5" />}
+                sx={{
+                    color: 'var(--muted-foreground)',
+                    '&:hover': {
+                        color: 'var(--foreground)',
+                    }
+                }}
+            >
+                GitHub
+            </MuiButton>
         </div>
     </footer>
 );
 
 const FAQ = () => {
-    const faqs = [
-        {
-            question: "How does load balancing work?",
-            answer: "Tingly Box automatically distributes requests across multiple API tokens using routing strategies. By default, it uses round-robin with a request threshold of 100 (if not configured)."
-        },
-        {
-            question: "How do I enable mirrored networking mode in WSL2?",
-            answer: "Add the following configuration to your .wslconfig file, then restart WSL:\n\n[wsl2]\nnetworkingMode=mirrored\n\nFor more details, see the official documentation: https://learn.microsoft.com/en-us/windows/wsl/wsl-config"
-        },
-        {
-            question: "Can I use tingly-box running on the host for applications in Docker containers?",
-            answer: "Yes. Just update the base URL to http://host.docker.internal:12580/{anthropic|openai} to connect from within the container."
-        }
-    ];
+
 
     return (
         <section id="faq-section" className="py-16 px-4 bg-gradient-to-t from-background via-background to-card/20">
-            <div className="mx-auto" style={{maxWidth: FULL_WIDTH}}>
+            <div className="mx-auto" style={{ maxWidth: FULL_WIDTH }}>
                 <h2 className="text-3xl font-bold text-center mb-4">Frequently Asked Questions</h2>
                 <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
                     Common questions about Tingly Box
@@ -386,13 +371,15 @@ const FAQ = () => {
                 <div className="mt-16 text-center">
                     <p className="text-lg mb-4">Still have questions?</p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Button asChild variant="outline">
-                            <a href="https://github.com/tingly-dev/tingly-box/issues" target="_blank"
-                               rel="noopener noreferrer">
-                                <ExternalLink className="w-4 h-4 mr-2"/>
-                                Ask on GitHub
-                            </a>
-                        </Button>
+                        <MuiButton
+                            variant="outlined"
+                            href="https://github.com/tingly-dev/tingly-box/issues"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            startIcon={<ExternalLink className="w-4 h-4" />}
+                        >
+                            Ask on GitHub
+                        </MuiButton>
                     </div>
                 </div>
             </div>
@@ -402,11 +389,11 @@ const FAQ = () => {
 
 const Index = () => (
     <main className="min-h-screen">
-        <Hero/>
-        <Features/>
-        <QuickStart/>
-        <FAQ/>
-        <Footer/>
+        <Hero />
+        <Features />
+        <QuickStart />
+        <FAQ />
+        <Footer />
     </main>
 );
 

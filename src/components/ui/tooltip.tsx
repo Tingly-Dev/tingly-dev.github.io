@@ -1,28 +1,72 @@
 import * as React from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { Tooltip as MuiTooltip, tooltipClasses } from "@mui/material";
 
-import { cn } from "@/lib/utils";
+// MUI Tooltip wrapper for consistency with existing API
+const TooltipProvider = ({ children }: { children: React.ReactNode }) => {
+  // MUI doesn't require a provider like Radix UI, but we keep this for backward compatibility
+  return <>{children}</>;
+};
 
-const TooltipProvider = TooltipPrimitive.Provider;
+const Tooltip = ({ children, ...props }: React.ComponentProps<typeof MuiTooltip>) => {
+  return (
+    <MuiTooltip
+      {...props}
+      slotProps={{
+        tooltip: {
+          sx: {
+            backgroundColor: 'var(--popover)',
+            color: 'var(--popover-foreground)',
+            border: '1px solid var(--border)',
+            fontSize: '0.875rem',
+            padding: '0.375rem 0.75rem',
+            borderRadius: '0.375rem',
+            maxWidth: '300px',
+            fontWeight: 400,
+            boxShadow: 'var(--shadow)',
+            [`&.${tooltipClasses.arrow}`]: {
+              color: 'var(--popover)',
+              '&::before': {
+                border: '1px solid var(--border)',
+              },
+            },
+          },
+        },
+        arrow: {
+          sx: {
+            color: 'var(--popover)',
+          },
+        },
+      }}
+      arrow
+    >
+      {children}
+    </MuiTooltip>
+  );
+};
 
-const Tooltip = TooltipPrimitive.Root;
-
-const TooltipTrigger = TooltipPrimitive.Trigger;
-
-const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Content
+const TooltipTrigger = React.forwardRef<
+  React.ElementRef<"button">,
+  React.ComponentPropsWithoutRef<"button">
+>(({ className, ...props }, ref) => (
+  <button
+    className={className}
     ref={ref}
-    sideOffset={sideOffset}
-    className={cn(
-      "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className,
-    )}
     {...props}
   />
 ));
-TooltipContent.displayName = TooltipPrimitive.Content.displayName;
+TooltipTrigger.displayName = "TooltipTrigger";
 
+const TooltipContent = React.forwardRef<
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={className}
+    {...props}
+  />
+));
+TooltipContent.displayName = "TooltipContent";
+
+// Export MUI tooltip components with original names for backward compatibility
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

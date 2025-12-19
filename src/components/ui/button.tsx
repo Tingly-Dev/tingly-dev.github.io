@@ -1,47 +1,88 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { Button as MuiButton, ButtonProps as MuiButtonProps } from "@mui/material";
 
-import { cn } from "@/lib/utils";
+// Mapping of variants to MUI variants
+const variantMapping = {
+  default: "contained" as const,
+  destructive: "contained" as const,
+  outline: "outlined" as const,
+  secondary: "outlined" as const,
+  ghost: "text" as const,
+  link: "text" as const,
+};
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
+// Mapping of sizes to MUI sizes
+const sizeMapping = {
+  default: "medium" as const,
+  sm: "small" as const,
+  lg: "large" as const,
+  icon: "medium" as const,
+};
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg" | "icon";
   asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+  ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
+    const muiVariant = variantMapping[variant];
+    const muiSize = sizeMapping[size];
+
+    const sxProps: MuiButtonProps['sx'] = {
+      textTransform: 'none',
+      fontWeight: 500,
+      gap: '0.5rem',
+      ...(variant === 'destructive' && {
+        backgroundColor: 'var(--destructive)',
+        '&:hover': {
+          backgroundColor: 'var(--destructive)',
+          opacity: 0.9,
+        },
+      }),
+      ...(variant === 'secondary' && {
+        backgroundColor: 'var(--secondary)',
+        color: 'var(--secondary-foreground)',
+        '&:hover': {
+          backgroundColor: 'var(--secondary)',
+          opacity: 0.8,
+        },
+      }),
+      ...(variant === 'ghost' && {
+        '&:hover': {
+          backgroundColor: 'var(--accent)',
+          color: 'var(--accent-foreground)',
+        },
+      }),
+      ...(variant === 'link' && {
+        textDecoration: 'underline',
+        '&:hover': {
+          textDecoration: 'underline',
+          backgroundColor: 'transparent',
+        },
+      }),
+      ...(size === 'icon' && {
+        minWidth: '2.5rem',
+        width: '2.5rem',
+        height: '2.5rem',
+        padding: 0,
+      }),
+      ...(className && { className }),
+    };
+
+    return (
+      <MuiButton
+        ref={ref}
+        variant={muiVariant}
+        size={muiSize}
+        sx={sxProps}
+        {...(props as MuiButtonProps)}
+      />
+    );
   },
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+export { Button, variantMapping as buttonVariants };
