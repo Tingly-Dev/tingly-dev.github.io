@@ -35,7 +35,7 @@ export const faqs = [
     },
     {
         question: "Can I use tingly-box running on the host for applications in Docker containers?",
-        answer: "Yes. Just update the base URL to http://host.docker.internal:12580/{anthropic|openai} to connect from within the container."
+        answer: "Yes. Just update the base URL to \n http://host.docker.internal:12580/{anthropic|openai} \nto connect from within the container."
     },
     {
         question: "Why do I get \"BadRequestError: LLM Provider NOT provided\" when using LiteLLM with model set to \"tingly\"?",

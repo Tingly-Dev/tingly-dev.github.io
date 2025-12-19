@@ -479,7 +479,18 @@ const FAQ = () => {
                                     </span>
                                     <span className="text-foreground leading-tight">{faq.question}</span>
                                 </h3>
-                                <p className="ml-7 sm:ml-9 text-muted-foreground leading-relaxed text-sm sm:text-base">{faq.answer}</p>
+                                <p className="ml-7 sm:ml-9 text-muted-foreground leading-relaxed text-sm sm:text-base break-words">
+                                    {faq.answer.split('\n').map((paragraph, i) => (
+                                        <span key={i}>
+                                            {paragraph.startsWith('http') || paragraph.includes('://') ? (
+                                                <span className="break-all">{paragraph}</span>
+                                            ) : (
+                                                paragraph
+                                            )}
+                                            {i < faq.answer.split('\n').length - 1 && <br />}
+                                        </span>
+                                    ))}
+                                </p>
                             </div>
                         ))}
                     </div>
