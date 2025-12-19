@@ -407,8 +407,9 @@ const FAQ = () => {
 
 
     return (
-        <section id="faq-section" className="py-16 px-4 bg-gradient-to-t from-background via-background to-card/20">
-            <div className="mx-auto" style={{ maxWidth: FULL_WIDTH }}>
+        <section className="py-16 px-4">
+            <div id="faq-section" className="mx-auto rounded-2xl bg-gradient-to-t from-background via-background to-card/20 backdrop-blur-sm shadow-2xl border border-border/30"
+                 style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
                 <h2 className="text-3xl font-bold text-center mb-4">Frequently Asked Questions</h2>
                 <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
                     Common questions about Tingly Box
