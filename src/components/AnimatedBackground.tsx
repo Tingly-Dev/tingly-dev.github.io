@@ -141,7 +141,7 @@ const AnimatedBackground = () => {
           maxRadius,
           minRadius,
           color: `rgba(${color.r}, ${color.g}, ${color.b}`,
-          baseAlpha: Math.random() * 0.12 + 0.08,
+          baseAlpha: Math.random() * 0.1 + 0.05,
           pulseSpeed: Math.random() * 0.008 + 0.005,
           pulsePhase: Math.random() * Math.PI * 2,
         });
@@ -200,7 +200,7 @@ const AnimatedBackground = () => {
       const deltaFactor = Math.min(Math.max(deltaTime / 16.67, 0.5), 1.5); // Clamp between 0.5x and 1.5x speed
 
       // Clear canvas with more opaque fill to prevent white buildup
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.3)';
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.4)';
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
       // Skip the additional background gradient to reduce whiteness
@@ -256,7 +256,7 @@ const AnimatedBackground = () => {
         }
 
         // Draw particle with simple glow effect
-        const alpha = particle.baseAlpha * (0.4 + pulseFactor * 0.25);
+        const alpha = particle.baseAlpha * (0.3 + pulseFactor * 0.2);
 
         // Use 'lighter' composite operation which is more stable than 'screen'
         ctx.globalCompositeOperation = 'lighter';
