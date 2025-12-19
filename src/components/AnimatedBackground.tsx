@@ -137,6 +137,10 @@ const AnimatedBackground = () => {
         const maxRadius = isMobile ? Math.random() * 150 + 120 : Math.random() * 220 + 180;
         const minRadius = isMobile ? Math.random() * 25 + 25 : Math.random() * 40 + 40;
 
+        // Higher brightness on desktop
+        const baseAlphaRange = isMobile ? { min: 0.05, max: 0.12 } : { min: 0.08, max: 0.18 };
+        const baseAlpha = Math.random() * (baseAlphaRange.max - baseAlphaRange.min) + baseAlphaRange.min;
+
         particles.push({
           x: Math.random() * window.innerWidth,
           y: Math.random() * window.innerHeight,
@@ -147,7 +151,7 @@ const AnimatedBackground = () => {
           maxRadius,
           minRadius,
           color: `rgba(${color.r}, ${color.g}, ${color.b}`,
-          baseAlpha: Math.random() * 0.1 + 0.05,
+          baseAlpha,
           pulseSpeed: Math.random() * 0.008 + 0.005,
           pulsePhase: Math.random() * Math.PI * 2,
         });
