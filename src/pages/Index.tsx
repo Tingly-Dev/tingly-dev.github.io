@@ -1,5 +1,6 @@
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { faqs, features, screenshots } from "@/data/text";
-import { Card, CardContent, Button as MuiButton, Dialog, DialogContent } from "@mui/material";
+import { Card, CardContent, Dialog, DialogContent, Button as MuiButton } from "@mui/material";
 import {
     ChevronLeft,
     ChevronRight,
@@ -8,7 +9,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import AnimatedBackground from "@/components/AnimatedBackground";
 // Syntax Highlighter Imports
 import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
@@ -196,7 +196,7 @@ const Features = () => (
     <section className="py-20 px-4">
         {/* Background container with rounded corners */}
         <div className="mx-auto rounded-2xl bg-gradient-to-b from-card/60 to-card/80 backdrop-blur-sm shadow-xl border border-border/20"
-             style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
+            style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
             <div className="px-6 sm:px-8 md:px-12 py-16">
                 <h2 className="text-3xl font-bold text-center mb-12">Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -252,11 +252,19 @@ const STEPS = [
         title: "Add Providers",
         desc: "Configure API keys for your preferred model providers.",
         content: (
-            <div className="space-y-2">
-                <p className="text-sm">Access UI: <span
-                    className="text-cyan-400 font-mono font-bold">http://localhost:12580/home?user_auth_token=tingly-box-user-token</span>
+            <div className="space-y-3 p-4 bg-secondary/20 rounded-lg border border-white/5">
+                <p className="text-sm font-medium">Access UI:</p>
+                <a
+                    href="http://localhost:12580/home?user_auth_token=tingly-box-user-token"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-cyan-400 font-mono break-all hover:underline block bg-black/20 p-2 rounded"
+                >
+                    http://localhost:12580/home?user_auth_token=tingly-box-user-token
+                </a>
+                <p className="text-xs text-muted-foreground italic">
+                    Navigate to the <b>Provider</b> tab to add your API keys.
                 </p>
-                <p className="text-xs text-slate-400">Navigate to the <b>Credentials</b> tab to add your API keys.</p>
             </div>
         ),
     },
@@ -309,71 +317,71 @@ const QuickStart = () => {
         <section className="py-20 px-4">
             {/* Dark background container with limited width */}
             <div className="mx-auto rounded-2xl bg-gradient-to-b from-background/90 to-background/98 backdrop-blur-sm text-slate-200 shadow-2xl border border-border/30"
-                 style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
+                style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
                 <div className="px-6 sm:px-8 md:px-12 py-12">
                     <h2 className="text-3xl font-bold text-center mb-16 tracking-tight text-white">Quick Start</h2>
 
-                <div className="relative">
-                    {/* Vertical Center Line */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gradient-to-b from-transparent via-slate-800 to-transparent hidden md:block" />
+                    <div className="relative">
+                        {/* Vertical Center Line */}
+                        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gradient-to-b from-transparent via-slate-800 to-transparent hidden md:block" />
 
-                    <div className="space-y-20">
-                        {STEPS.map((step, idx) => {
-                            const isTextOnRight = idx % 2 === 0; // Step 1 (0), Step 3 (2)
-                            const stepNum = idx + 1;
+                        <div className="space-y-20">
+                            {STEPS.map((step, idx) => {
+                                const isTextOnRight = idx % 2 === 0; // Step 1 (0), Step 3 (2)
+                                const stepNum = idx + 1;
 
-                            return (
-                                <div key={idx} className="relative flex flex-col md:flex-row items-center">
-                                    {/* Left Column */}
-                                    <div className="w-full md:w-1/2 px-10 flex flex-col items-end">
-                                        {!isTextOnRight ? (
-                                            /* Even Steps (2, 4): Text on Left, Number on Right near line */
-                                            <div className="text-right group w-full">
-                                                <div className="flex items-center justify-end gap-4 mb-3">
-                                                    <h3 className="text-xl font-bold group-hover:text-cyan-400 transition-colors text-white">
-                                                        {step.title}
-                                                    </h3>
-                                                    <span className="w-8 h-8 flex-shrink-0 bg-cyan-400 text-black rounded-full flex items-center justify-center font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]">
-                                                        {stepNum}
-                                                    </span>
+                                return (
+                                    <div key={idx} className="relative flex flex-col md:flex-row items-center">
+                                        {/* Left Column */}
+                                        <div className="w-full md:w-1/2 px-10 flex flex-col items-end">
+                                            {!isTextOnRight ? (
+                                                /* Even Steps (2, 4): Text on Left, Number on Right near line */
+                                                <div className="text-right group w-full">
+                                                    <div className="flex items-center justify-end gap-4 mb-3">
+                                                        <h3 className="text-xl font-bold group-hover:text-cyan-400 transition-colors text-white">
+                                                            {step.title}
+                                                        </h3>
+                                                        <span className="w-8 h-8 flex-shrink-0 bg-cyan-400 text-black rounded-full flex items-center justify-center font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                                                            {stepNum}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
                                                 </div>
-                                                <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
-                                            </div>
-                                        ) : (
-                                            /* Odd Steps (1, 3): Code on Left */
-                                            <div className="w-full">
-                                                {step.content}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Right Column */}
-                                    <div className="w-full md:w-1/2 px-10 mt-8 md:mt-0 flex flex-col items-start">
-                                        {isTextOnRight ? (
-                                            /* Odd Steps (1, 3): Text on Right, Number on Left near line */
-                                            <div className="text-left group w-full">
-                                                <div className="flex items-center justify-start gap-4 mb-3">
-                                                    <span className="w-8 h-8 flex-shrink-0 bg-cyan-400 text-black rounded-full flex items-center justify-center font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]">
-                                                        {stepNum}
-                                                    </span>
-                                                    <h3 className="text-xl font-bold group-hover:text-cyan-400 transition-colors text-white">
-                                                        {step.title}
-                                                    </h3>
+                                            ) : (
+                                                /* Odd Steps (1, 3): Code on Left */
+                                                <div className="w-full">
+                                                    {step.content}
                                                 </div>
-                                                <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
-                                            </div>
-                                        ) : (
-                                            /* Even Steps (2, 4): Visual/Link on Right */
-                                            <div className="w-full">
-                                                {step.content}
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
+
+                                        {/* Right Column */}
+                                        <div className="w-full md:w-1/2 px-10 mt-8 md:mt-0 flex flex-col items-start">
+                                            {isTextOnRight ? (
+                                                /* Odd Steps (1, 3): Text on Right, Number on Left near line */
+                                                <div className="text-left group w-full">
+                                                    <div className="flex items-center justify-start gap-4 mb-3">
+                                                        <span className="w-8 h-8 flex-shrink-0 bg-cyan-400 text-black rounded-full flex items-center justify-center font-bold shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                                                            {stepNum}
+                                                        </span>
+                                                        <h3 className="text-xl font-bold group-hover:text-cyan-400 transition-colors text-white">
+                                                            {step.title}
+                                                        </h3>
+                                                    </div>
+                                                    <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                                                </div>
+                                            ) : (
+                                                /* Even Steps (2, 4): Visual/Link on Right */
+                                                <div className="w-full">
+                                                    {step.content}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </section>
@@ -409,7 +417,7 @@ const FAQ = () => {
     return (
         <section className="py-16 px-4">
             <div id="faq-section" className="mx-auto rounded-2xl bg-gradient-to-t from-background via-background to-card/20 backdrop-blur-sm shadow-2xl border border-border/30"
-                 style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
+                style={{ maxWidth: FULL_WIDTH, width: '95%' }}>
                 <h2 className="text-3xl font-bold text-center mb-4">Frequently Asked Questions</h2>
                 <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
                     Common questions about Tingly Box
