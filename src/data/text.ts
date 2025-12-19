@@ -1,18 +1,16 @@
 
 
-import screenshotCredentials from "@/assets/screenshot-credentials.png";
-import screenshotHistory from "@/assets/screenshot-history.png";
-import screenshotHome from "@/assets/screenshot-home.png";
-import screenshotRules from "@/assets/screenshot-rules.png";
-import screenshotSystem from "@/assets/screenshot-system.png";
+import screenshotHome from "@/assets/Home.png";
+import screenshotCredentials from "@/assets/Provider.png";
+import screenshotRules from "@/assets/Routing.png";
 import { ArrowLeftRight, Gauge, Globe, Layers } from "lucide-react";
 
 export const screenshots = [
     { src: screenshotHome, alt: "Tingly Box Home - Model Proxy Config" },
     { src: screenshotCredentials, alt: "Tingly Box Credentials Management" },
     { src: screenshotRules, alt: "Tingly Box Proxy Rules Configuration" },
-    { src: screenshotSystem, alt: "Tingly Box Server Status & Control" },
-    { src: screenshotHistory, alt: "Tingly Box Activity Log & History" },
+    // { src: screenshotSystem, alt: "Tingly Box Server Status & Control" },
+    // { src: screenshotHistory, alt: "Tingly Box Activity Log & History" },
 ];
 
 export const features = [
