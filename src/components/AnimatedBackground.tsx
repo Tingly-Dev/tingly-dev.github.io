@@ -9,7 +9,7 @@ const BackgroundContainer = styled.div`
   height: 100%;
   z-index: -1;
   overflow: hidden;
-  background: #0a0a0fda;
+  background: #0a0a0f;
 `;
 
 const Canvas = styled.canvas`
@@ -94,9 +94,9 @@ const AnimatedBackground = () => {
           height / 2,
           Math.max(width, height) / 2
         );
-        bgGradient.addColorStop(0, 'rgba(15, 15, 25, 0.9)');
-        bgGradient.addColorStop(0.5, 'rgba(10, 10, 20, 0.95)');
-        bgGradient.addColorStop(1, 'rgba(5, 5, 15, 1)');
+        bgGradient.addColorStop(0, 'rgba(18, 18, 30, 0.85)');
+        bgGradient.addColorStop(0.5, 'rgba(12, 12, 22, 0.92)');
+        bgGradient.addColorStop(1, 'rgba(5, 5, 15, 0.98)');
 
         bgCtxRef.current.fillStyle = bgGradient;
         bgCtxRef.current.fillRect(0, 0, width, height);
@@ -123,13 +123,13 @@ const AnimatedBackground = () => {
 
     // Initialize particles with performance optimizations
     const initParticles = () => {
-      const particleCount = Math.min(40, Math.floor((window.innerWidth * window.innerHeight) / 20000));
+      const particleCount = Math.min(35, Math.floor((window.innerWidth * window.innerHeight) / 25000));
       const particles: Particle[] = [];
 
       for (let i = 0; i < particleCount; i++) {
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const maxRadius = Math.random() * 300 + 200;
-        const minRadius = Math.random() * 60 + 40;
+        const maxRadius = Math.random() * 220 + 180;
+        const minRadius = Math.random() * 40 + 40;
 
         particles.push({
           x: Math.random() * window.innerWidth,
@@ -141,8 +141,8 @@ const AnimatedBackground = () => {
           maxRadius,
           minRadius,
           color: `rgba(${color.r}, ${color.g}, ${color.b}`,
-          baseAlpha: Math.random() * 0.15 + 0.15,
-          pulseSpeed: Math.random() * 0.015 + 0.008,
+          baseAlpha: Math.random() * 0.12 + 0.08,
+          pulseSpeed: Math.random() * 0.008 + 0.005,
           pulsePhase: Math.random() * Math.PI * 2,
         });
       }
@@ -191,23 +191,19 @@ const AnimatedBackground = () => {
       lastTimeRef.current = currentTime;
 
       // Skip frames if delta is too small to save resources
-      if (deltaTime < 8) { // Slightly lower threshold for smoother animation
+      if (deltaTime < 16) { // Maintain stable 60fps
         animationIdRef.current = requestAnimationFrame(animate);
         return;
       }
 
-      const deltaFactor = Math.min(deltaTime / 16.67, 2); // Normalize to 60fps
+      // Clamp delta to prevent large jumps
+      const deltaFactor = Math.min(Math.max(deltaTime / 16.67, 0.5), 1.5); // Clamp between 0.5x and 1.5x speed
 
-      // Clear canvas with slight trail effect
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+      // Clear canvas with more opaque fill to prevent white buildup
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.3)';
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-      // Draw cached background gradient
-      if (bgCtxRef.current && bgCanvasRef.current) {
-        ctx.globalAlpha = 0.98;
-        ctx.drawImage(bgCanvasRef.current, 0, 0);
-        ctx.globalAlpha = 1;
-      }
+      // Skip the additional background gradient to reduce whiteness
 
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
@@ -222,24 +218,24 @@ const AnimatedBackground = () => {
         const pulseFactor = Math.sin(particle.pulsePhase) * 0.5 + 0.5;
         particle.targetRadius = particle.minRadius + (particle.maxRadius - particle.minRadius) * pulseFactor;
 
-        // Smooth radius transitions
-        particle.radius += (particle.targetRadius - particle.radius) * 0.1;
+        // Smooth radius transitions - make it slower to reduce flicker
+        particle.radius += (particle.targetRadius - particle.radius) * 0.06;
 
         // Update position with delta time
-        particle.x += particle.vx * deltaFactor * motionFactor;
-        particle.y += particle.vy * deltaFactor * motionFactor;
+        particle.x += particle.vx * deltaFactor * motionFactor * 0.8;
+        particle.y += particle.vy * deltaFactor * motionFactor * 0.8;
 
         // Mouse interaction with optimized distance calculation
         const dx = mouseX - particle.x;
         const dy = mouseY - particle.y;
         const distSq = dx * dx + dy * dy;
-        const effectRadiusSq = 350 * 350;
+        const effectRadiusSq = 300 * 300;
 
         if (distSq < effectRadiusSq) {
           const dist = Math.sqrt(distSq);
-          const force = (350 - dist) / 350 * 0.03;
-          particle.vx += (dx / dist) * force * deltaFactor * 0.0015;
-          particle.vy += (dy / dist) * force * deltaFactor * 0.0015;
+          const force = (300 - dist) / 300 * 0.035;
+          particle.vx += (dx / dist) * force * deltaFactor * 0.001;
+          particle.vy += (dy / dist) * force * deltaFactor * 0.001;
         }
 
         // Apply damping
@@ -259,35 +255,33 @@ const AnimatedBackground = () => {
           particle.y = particle.y < particle.radius ? particle.radius : canvasHeight - particle.radius;
         }
 
-        // Draw particle with cached gradient
-        const alpha = particle.baseAlpha * (0.5 + pulseFactor * 0.5);
+        // Draw particle with simple glow effect
+        const alpha = particle.baseAlpha * (0.4 + pulseFactor * 0.25);
 
-        // Use save/restore for performance
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
+        // Use 'lighter' composite operation which is more stable than 'screen'
+        ctx.globalCompositeOperation = 'lighter';
 
+        // Create simple radial gradient for glow
         const gradient = ctx.createRadialGradient(
           particle.x,
           particle.y,
           0,
           particle.x,
           particle.y,
-          particle.radius
+          particle.radius * 1.2
         );
 
         gradient.addColorStop(0, particle.color + ', ' + alpha + ')');
-        gradient.addColorStop(0.4, particle.color + ', ' + (alpha * 0.5) + ')');
+        gradient.addColorStop(0.3, particle.color + ', ' + (alpha * 0.6) + ')');
         gradient.addColorStop(1, particle.color + ', 0)');
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(
-          particle.x - particle.radius,
-          particle.y - particle.radius,
-          particle.radius * 2,
-          particle.radius * 2
-        );
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius * 1.2, 0, Math.PI * 2);
+        ctx.fill();
 
-        ctx.restore();
+        // Reset composite operation for next particle
+        ctx.globalCompositeOperation = 'source-over';
       }
 
       animationIdRef.current = requestAnimationFrame(animate);
